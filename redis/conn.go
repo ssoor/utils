@@ -58,6 +58,27 @@ func (c *conn) GetPubSubConn() PubSubConn {
 	return &pubSubConn{PubSubConn: &redis.PubSubConn{Conn: c.ConnWithTimeout}}
 }
 
+func (c *conn) Receive() (reply interface{}, err error) {
+	reply, err = c.ConnWithTimeout.Receive()
+
+	switch v := reply.(type) {
+	case redis.Message:
+		return Message{Channel: v.Channel, Pattern: v.Pattern, Data: v.Data}, err
+	}
+
+	return reply, err
+}
+func (c *conn) ReceiveWithTimeout(timeout time.Duration) (reply interface{}, err error) {
+	reply, err = c.ConnWithTimeout.ReceiveWithTimeout(timeout)
+
+	switch v := reply.(type) {
+	case redis.Message:
+		return Message{Channel: v.Channel, Pattern: v.Pattern, Data: v.Data}, err
+	}
+
+	return reply, err
+}
+
 func (c *conn) Subscribe(channel ...interface{}) error {
 	pubConn := redis.PubSubConn{Conn: c.ConnWithTimeout}
 
