@@ -24,8 +24,8 @@ func (c *pool) Get() Conn {
 	return &conn{ConnWithTimeout: c.Pool.Get().(redis.ConnWithTimeout)}
 }
 
-// NewPool is
-func NewPool(addr string) Pool {
+// NewDefaultPool is
+func NewDefaultPool(addr string) Pool {
 	rawPool := &redis.Pool{
 		MaxIdle:     5,
 		MaxActive:   100,
