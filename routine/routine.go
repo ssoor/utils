@@ -1,4 +1,4 @@
-package routinue
+package routine
 
 import "time"
 
